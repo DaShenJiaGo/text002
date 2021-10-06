@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个地方写的是你接口的目录地址-->
+<mapper namespace="com.beijing.dao.LiuXueBaoDao">
+    <update id="updatMoney">
+
+        update YingHang set money=money+#{money} where id=#{id}
+    </update>
+
+    <select id="selectPople" resultType="com.beijing.domain.YingHang">
+        select * from yinghang where id=#{id}
+    </select>
+
+    <update id="zhangFang">
+        update YingHang set money=money-#{money} where id=#{id}
+    </update>
+
+</mapper>

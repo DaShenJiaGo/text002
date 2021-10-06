@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <bean id="MyDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${Database}"/>
+        <property name="username" value="${Account}"/>
+        <property name="password" value="${password}"/>
+        <property name="maxActive" value="${number}"/>
+    </bean>
+
+    <bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="MyDataSource"/>
+        <!--这里经常要改-->
+        <property name="configLocation" value="classpath:Spring-mybatis.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="SqlSessionFactory"/>
+        <!--这里是经常要修改的地方,value是声明你的接口在哪个包下面-->
+        <property name="basePackage" value="com.beijing.dao"/>
+    </bean>
+
+    <bean id="buyYingHang" class="com.beijing.service.YingHangServiceInpl">
+        <property name="liuXueBaoDao" ref="liuXueBaoDao"/>
+    </bean>
+    <!--声明service的事物管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- ref="MyDataSource"是上面的数据源的id-->
+        <property name="dataSource" ref="MyDataSource"/>
+    </bean>
+</beans>
